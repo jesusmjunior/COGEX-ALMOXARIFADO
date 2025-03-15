@@ -1,21 +1,20 @@
 import os
-import subprocess
-import sys
 import time
 
 # Instalar dependências necessárias antes da importação
-try:
-    subprocess.run([sys.executable, "-m", "pip", "install", "--upgrade", "pip"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    subprocess.run([sys.executable, "-m", "pip", "install", "streamlit", "pandas", "plotly", "gspread", "oauth2client", "pyngrok"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-except Exception as e:
-    print(f"Erro na instalação de pacotes: {e}")
+os.system("pip install --upgrade pip")
+os.system("pip install streamlit pandas plotly gspread oauth2client pyngrok")
 
-import streamlit as st
-import pandas as pd
-import plotly.express as px
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
-from pyngrok import ngrok
+try:
+    import streamlit as st
+    import pandas as pd
+    import plotly.express as px
+    import gspread
+    from oauth2client.service_account import ServiceAccountCredentials
+    from pyngrok import ngrok
+except ImportError as e:
+    print(f"Erro ao importar bibliotecas: {e}")
+    exit()
 
 # Configuração do Dashboard
 st.set_page_config(page_title="📦 Dashboard de Inventário", layout="wide")
