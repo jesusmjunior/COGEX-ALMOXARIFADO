@@ -7,6 +7,9 @@ from pyngrok import ngrok
 import os
 import time
 
+# Instalar dependências necessárias
+os.system("pip install streamlit pandas plotly gspread oauth2client pyngrok")
+
 # Configuração do Dashboard
 st.set_page_config(page_title="📦 Dashboard de Inventário", layout="wide")
 st.title("📦 Dashboard de Inventário e Itens")
