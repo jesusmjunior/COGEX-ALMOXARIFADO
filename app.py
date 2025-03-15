@@ -1,14 +1,16 @@
+import os
+
+# Instalar dependências necessárias antes da importação
+os.system("pip install --upgrade pip")
+os.system("pip install streamlit pandas plotly gspread oauth2client pyngrok")
+
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from pyngrok import ngrok
-import os
 import time
-
-# Instalar dependências necessárias
-os.system("pip install streamlit pandas plotly gspread oauth2client pyngrok")
 
 # Configuração do Dashboard
 st.set_page_config(page_title="📦 Dashboard de Inventário", layout="wide")
