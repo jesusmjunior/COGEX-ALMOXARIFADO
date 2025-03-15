@@ -1,10 +1,14 @@
 import os
 import subprocess
 import sys
+import time
 
 # Instalar dependências necessárias antes da importação
-subprocess.run([sys.executable, "-m", "pip", "install", "--upgrade", "pip"], check=True)
-subprocess.run([sys.executable, "-m", "pip", "install", "streamlit", "pandas", "plotly", "gspread", "oauth2client", "pyngrok"], check=True)
+try:
+    subprocess.run([sys.executable, "-m", "pip", "install", "--upgrade", "pip"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    subprocess.run([sys.executable, "-m", "pip", "install", "streamlit", "pandas", "plotly", "gspread", "oauth2client", "pyngrok"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+except Exception as e:
+    print(f"Erro na instalação de pacotes: {e}")
 
 import streamlit as st
 import pandas as pd
@@ -12,7 +16,6 @@ import plotly.express as px
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from pyngrok import ngrok
-import time
 
 # Configuração do Dashboard
 st.set_page_config(page_title="📦 Dashboard de Inventário", layout="wide")
@@ -20,16 +23,24 @@ st.title("📦 Dashboard de Inventário e Itens")
 
 # Configurar acesso ao Google Sheets
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", scope)
-client = gspread.authorize(creds)
+try:
+    creds = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", scope)
+    client = gspread.authorize(creds)
+except Exception as e:
+    st.error(f"Erro ao autenticar no Google Sheets: {e}")
+    st.stop()
 
 # URL da planilha do Google Sheets
 gsheet_url = "https://docs.google.com/spreadsheets/d/1NLLZoIxIZ2u-liHGKM5P8WNXdu3ycCoUUiD3f0FsR84/edit?usp=sharing"
 
 # Abrir planilha e carregar dados
-doc = client.open_by_url(gsheet_url)
-df_items = pd.DataFrame(doc.worksheet("Items").get_all_records())
-df_inventory = pd.DataFrame(doc.worksheet("Inventory").get_all_records())
+try:
+    doc = client.open_by_url(gsheet_url)
+    df_items = pd.DataFrame(doc.worksheet("Items").get_all_records())
+    df_inventory = pd.DataFrame(doc.worksheet("Inventory").get_all_records())
+except Exception as e:
+    st.error(f"Erro ao carregar os dados da planilha: {e}")
+    st.stop()
 
 # Criar filtros interativos na barra lateral
 st.sidebar.header("🔎 Filtros")
@@ -58,6 +69,9 @@ st.success("✅ Dashboard carregado com sucesso!")
 
 # Configurar e iniciar o ngrok
 time.sleep(5)
-os.system("ngrok authtoken 2uINiHVg1G0p91CQXLvndb4SpuZ_3Wo8EtbWLkHWYfFDXnkrm")
-public_url = ngrok.connect(8501, "http").public_url
-st.write(f"🔗 [Acesse o Dashboard Aqui]({public_url})")
+try:
+    os.system("ngrok authtoken 2uINiHVg1G0p91CQXLvndb4SpuZ_3Wo8EtbWLkHWYfFDXnkrm")
+    public_url = ngrok.connect(8501, "http").public_url
+    st.write(f"🔗 [Acesse o Dashboard Aqui]({public_url})")
+except Exception as e:
+    st.error(f"Erro ao conectar com ngrok: {e}")
