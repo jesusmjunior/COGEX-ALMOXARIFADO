@@ -51,6 +51,6 @@ st.success("✅ Dashboard carregado com sucesso!")
 
 # Configurar e iniciar o ngrok
 time.sleep(5)
-!ngrok authtoken 2uINiHVg1G0p91CQXLvndb4SpuZ_3Wo8EtbWLkHWYfFDXnkrm
+os.system("ngrok authtoken 2uINiHVg1G0p91CQXLvndb4SpuZ_3Wo8EtbWLkHWYfFDXnkrm")
 public_url = ngrok.connect(8501, "http").public_url
 st.write(f"🔗 [Acesse o Dashboard Aqui]({public_url})")
