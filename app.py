@@ -1,8 +1,10 @@
 import os
+import subprocess
+import sys
 
 # Instalar dependências necessárias antes da importação
-os.system("pip install --upgrade pip")
-os.system("pip install streamlit pandas plotly gspread oauth2client pyngrok")
+subprocess.run([sys.executable, "-m", "pip", "install", "--upgrade", "pip"], check=True)
+subprocess.run([sys.executable, "-m", "pip", "install", "streamlit", "pandas", "plotly", "gspread", "oauth2client", "pyngrok"], check=True)
 
 import streamlit as st
 import pandas as pd
